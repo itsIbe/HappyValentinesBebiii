@@ -8,13 +8,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
 <style>
+html, body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   background: linear-gradient(#ffe6eb, #fff);
   font-family: 'Pacifico', cursive;
-  text-align: center;
   overflow-x: hidden;
   touch-action: manipulation;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
 }
 
 /* Buttons */
@@ -31,11 +39,18 @@ button, .primary {
 button:hover, .primary:hover { transform: scale(1.05); }
 
 /* Falling hearts */
-.falling-container span {
+.falling-container {
   position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.falling-container span {
+  position: absolute;
   top: -40px;
   font-size: 26px;
-  pointer-events: none;
   animation: fall linear forwards;
 }
 @keyframes fall {
@@ -43,7 +58,11 @@ button:hover, .primary:hover { transform: scale(1.05); }
 }
 
 /* Envelope */
-.envelope-container { margin-top: 60px; padding: 0 15px; }
+.envelope-container {
+  position: relative;
+  z-index: 1;
+}
+
 .envelope {
   position: relative;
   width: 280px;
@@ -52,6 +71,7 @@ button:hover, .primary:hover { transform: scale(1.05); }
   margin: auto;
   perspective: 1000px;
 }
+
 .envelope-top {
   position: absolute;
   top: 0;
@@ -63,6 +83,7 @@ button:hover, .primary:hover { transform: scale(1.05); }
   transition: transform 1.2s cubic-bezier(0.68,-0.55,0.27,1.55);
   z-index: 3;
 }
+
 .envelope-body {
   position: absolute;
   bottom: 0;
@@ -71,6 +92,7 @@ button:hover, .primary:hover { transform: scale(1.05); }
   background: #ff4d6d;
   border-radius: 0 0 15px 15px;
 }
+
 .letter {
   position: absolute;
   top: 30px;
@@ -82,6 +104,7 @@ button:hover, .primary:hover { transform: scale(1.05); }
   z-index: 1;
   transition: transform 1.2s cubic-bezier(0.68,-0.55,0.27,1.55);
 }
+
 .envelope.open .envelope-top { transform: rotateX(-130deg); }
 .envelope.open .letter { transform: translateY(-100px); }
 
@@ -102,11 +125,16 @@ button:hover, .primary:hover { transform: scale(1.05); }
   animation: pulse 1.5s infinite;
   cursor: pointer;
 }
+
 @keyframes pulse {
   50% { transform: translateX(-50%) scale(1.2); }
 }
 
-.tap-text { color: #ff4d6d; margin-top: 12px; font-size: 14px; }
+.tap-text {
+  color: #ff4d6d;
+  margin-top: 15px;
+  font-size: 14px;
+}
 
 /* Modal */
 .modal {
@@ -115,22 +143,26 @@ button:hover, .primary:hover { transform: scale(1.05); }
   inset: 0;
   background: rgba(0,0,0,0.7);
   z-index: 10;
+  justify-content: center;
+  align-items: center;
 }
+
 .modal-content {
   background: white;
   width: 92%;
   max-width: 420px;
-  margin: 40px auto;
   padding: 18px;
   border-radius: 20px;
   animation: pop 0.4s ease;
   max-height: 85vh;
   overflow-y: auto;
 }
+
 @keyframes pop {
   from { transform: scale(0.8); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+
 .close {
   float: right;
   font-size: 24px;
@@ -143,6 +175,7 @@ button:hover, .primary:hover { transform: scale(1.05); }
   justify-content: space-around;
   margin: 10px 0;
 }
+
 .nav button {
   background: #ffe6eb;
   border-radius: 50%;
@@ -160,31 +193,22 @@ button:hover, .primary:hover { transform: scale(1.05); }
   height: 220px;
   overflow: hidden;
   border-radius: 12px;
-  position: relative;
-}
-.slider {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.5s ease-in-out;
-}
-.slide {
-  min-width: 100%;
-  height: 100%;
-}
-.slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
 }
 
-/* Responsive */
-@media (max-width: 500px) {
-  .slideshow { height: 180px; }
-  .envelope-container { margin-top: 40px; }
-  .letter h3 { font-size: 18px; }
-  .letter p { font-size: 14px; }
+.slider {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+  min-width: 100%;
+}
+
+.slide img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
 }
 </style>
 </head>
@@ -193,7 +217,6 @@ button:hover, .primary:hover { transform: scale(1.05); }
 
 <div class="falling-container"></div>
 
-<!-- Envelope -->
 <div class="envelope-container">
   <div class="envelope">
     <div class="envelope-top"></div>
@@ -208,7 +231,6 @@ button:hover, .primary:hover { transform: scale(1.05); }
   <p class="tap-text">Tap the heart 💕</p>
 </div>
 
-<!-- Modal -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
@@ -254,24 +276,22 @@ button:hover, .primary:hover { transform: scale(1.05); }
 </div>
 
 <script>
-// Envelope open
 const modal = document.getElementById("modal");
 const envelope = document.querySelector(".envelope");
 const secretBtn = document.getElementById("secretBtn");
 
 document.querySelector(".heart-seal").onclick = () => {
   envelope.classList.add("open");
-  setTimeout(() => modal.style.display = "block", 900);
+  setTimeout(() => modal.style.display = "flex", 900);
 };
+
 document.querySelector(".close").onclick = () => modal.style.display = "none";
 
-// Screens
 function showScreen(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-// Love Messages
 const loveMessages = [
   "You are my favorite notification 💖",
   "System alert: I miss you 🌻",
@@ -279,6 +299,7 @@ const loveMessages = [
   "No bugs detected… only love 😘",
   "No matter what happens, I choose you 💞"
 ];
+
 let loveIndex = 0;
 let interactionCount = 0;
 const loveTextEl = document.getElementById("loveText");
@@ -301,9 +322,9 @@ function nextLove(){
   if(interactionCount>=3) secretBtn.disabled=false;
 }
 
-// Falling Hearts
 const fallingContainer = document.querySelector(".falling-container");
 const flowers = ["💖","🌹","🌷"];
+
 setInterval(()=>{
   const el=document.createElement("span");
   el.innerText=flowers[Math.floor(Math.random()*flowers.length)];
@@ -313,7 +334,6 @@ setInterval(()=>{
   setTimeout(()=>el.remove(),7000);
 },350);
 
-// Gallery
 const slider = document.getElementById("slider");
 const slides = document.querySelectorAll(".slide");
 let currentIndex = 0;
@@ -334,10 +354,9 @@ slider.addEventListener("touchend",e=>{
   else if(endX-startX>50) showSlide(currentIndex-1);
 });
 
-// Start Magic
 function startMagic(){
   showScreen("message");
-} 
+}
 </script>
 
 </body>
