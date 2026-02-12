@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For You 💖</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
 <style>
@@ -12,6 +14,7 @@ body {
   font-family: 'Pacifico', cursive;
   text-align: center;
   overflow-x: hidden;
+  touch-action: manipulation;
 }
 
 /* Buttons */
@@ -19,9 +22,9 @@ button, .primary {
   background: #ff4d6d;
   color: white;
   border: none;
-  border-radius: 20px;
-  padding: 10px 25px;
-  font-size: 16px;
+  border-radius: 25px;
+  padding: 14px 28px;
+  font-size: 17px;
   cursor: pointer;
   transition: transform 0.2s;
 }
@@ -40,7 +43,7 @@ button:hover, .primary:hover { transform: scale(1.05); }
 }
 
 /* Envelope */
-.envelope-container { margin-top: 80px; padding: 0 10px; }
+.envelope-container { margin-top: 60px; padding: 0 15px; }
 .envelope {
   position: relative;
   width: 280px;
@@ -57,7 +60,7 @@ button:hover, .primary:hover { transform: scale(1.05); }
   background: #ff6f91;
   border-radius: 10px 10px 0 0;
   transform-origin: top center;
-  transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transition: transform 1.2s cubic-bezier(0.68,-0.55,0.27,1.55);
   z-index: 3;
 }
 .envelope-body {
@@ -74,19 +77,21 @@ button:hover, .primary:hover { transform: scale(1.05); }
   left: 5%;
   width: 90%;
   background: white;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 10px;
   z-index: 1;
-  transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transition: transform 1.2s cubic-bezier(0.68,-0.55,0.27,1.55);
 }
 .envelope.open .envelope-top { transform: rotateX(-130deg); }
 .envelope.open .letter { transform: translateY(-100px); }
+
 .letter-photo {
   width: 100%;
   height: 120px;
-  border-radius: 8px;
+  border-radius: 10px;
   object-fit: cover;
 }
+
 .heart-seal {
   position: absolute;
   top: 65px;
@@ -97,7 +102,10 @@ button:hover, .primary:hover { transform: scale(1.05); }
   animation: pulse 1.5s infinite;
   cursor: pointer;
 }
-@keyframes pulse { 50% { transform: translateX(-50%) scale(1.2); } }
+@keyframes pulse {
+  50% { transform: translateX(-50%) scale(1.2); }
+}
+
 .tap-text { color: #ff4d6d; margin-top: 12px; font-size: 14px; }
 
 /* Modal */
@@ -110,33 +118,43 @@ button:hover, .primary:hover { transform: scale(1.05); }
 }
 .modal-content {
   background: white;
-  width: 90%;
+  width: 92%;
   max-width: 420px;
-  margin: 60px auto;
-  padding: 20px;
+  margin: 40px auto;
+  padding: 18px;
   border-radius: 20px;
   animation: pop 0.4s ease;
+  max-height: 85vh;
+  overflow-y: auto;
 }
-@keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.close { float: right; font-size: 24px; cursor: pointer; }
+@keyframes pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.close {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
 
+/* Navigation */
 .nav {
   display: flex;
   justify-content: space-around;
   margin: 10px 0;
 }
 .nav button {
-  border: none;
   background: #ffe6eb;
   border-radius: 50%;
-  padding: 10px;
+  padding: 12px;
   font-size: 18px;
+  color: #ff4d6d;
 }
 
 .screen { display: none; }
 .screen.active { display: block; }
 
-/* Gallery (Instagram style) */
+/* Gallery */
 .slideshow {
   width: 100%;
   height: 220px;
@@ -148,7 +166,7 @@ button:hover, .primary:hover { transform: scale(1.05); }
   display: flex;
   width: 100%;
   height: 100%;
-  transition: transform 0.6s ease;
+  transition: transform 0.5s ease-in-out;
 }
 .slide {
   min-width: 100%;
@@ -164,9 +182,13 @@ button:hover, .primary:hover { transform: scale(1.05); }
 /* Responsive */
 @media (max-width: 500px) {
   .slideshow { height: 180px; }
+  .envelope-container { margin-top: 40px; }
+  .letter h3 { font-size: 18px; }
+  .letter p { font-size: 14px; }
 }
 </style>
 </head>
+
 <body>
 
 <div class="falling-container"></div>
@@ -223,10 +245,11 @@ button:hover, .primary:hover { transform: scale(1.05); }
 
     <div class="screen" id="secret">
       <h2>Secret Gift 🎁</h2>
-      <video autoplay loop muted style="width:100%;border-radius:12px;">
+      <video autoplay loop muted playsinline style="width:100%;border-radius:12px;">
         <source src="video.mp4" type="video/mp4">
       </video>
     </div>
+
   </div>
 </div>
 
@@ -248,7 +271,7 @@ function showScreen(id){
   document.getElementById(id).classList.add("active");
 }
 
-// 💌 Typing love messages
+// Love Messages
 const loveMessages = [
   "You are my favorite notification 💖",
   "System alert: I miss you 🌻",
@@ -278,7 +301,7 @@ function nextLove(){
   if(interactionCount>=3) secretBtn.disabled=false;
 }
 
-// 🌸 Falling hearts
+// Falling Hearts
 const fallingContainer = document.querySelector(".falling-container");
 const flowers = ["💖","🌹","🌷"];
 setInterval(()=>{
@@ -290,7 +313,7 @@ setInterval(()=>{
   setTimeout(()=>el.remove(),7000);
 },350);
 
-// 📸 Instagram-like swipe gallery + auto slide
+// Gallery
 const slider = document.getElementById("slider");
 const slides = document.querySelectorAll(".slide");
 let currentIndex = 0;
@@ -302,11 +325,8 @@ function showSlide(i){
   currentIndex=i;
   slider.style.transform = `translateX(-${i*100}%)`;
 }
-
-// auto swipe
 setInterval(()=>showSlide(currentIndex+1),3000);
 
-// swipe touch (iPhone)
 slider.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
 slider.addEventListener("touchend",e=>{
   let endX=e.changedTouches[0].clientX;
@@ -314,10 +334,10 @@ slider.addEventListener("touchend",e=>{
   else if(endX-startX>50) showSlide(currentIndex-1);
 });
 
-// Start magic
+// Start Magic
 function startMagic(){
   showScreen("message");
-}
+} 
 </script>
 
 </body>
