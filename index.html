@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  background: linear-gradient(#ffe6eb, #fff);
+  font-family: 'Pacifico', cursive;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+/* Buttons */
+button, .primary {
+  background: #ff4d6d;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+button:hover, .primary:hover { transform: scale(1.05); }
+
+/* Falling hearts */
+.falling-container span {
+  position: fixed;
+  top: -40px;
+  font-size: 26px;
+  pointer-events: none;
+  animation: fall linear forwards;
+}
+@keyframes fall {
+  to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+/* Envelope */
+.envelope-container { margin-top: 80px; padding: 0 10px; }
+.envelope {
+  position: relative;
+  width: 280px;
+  max-width: 90vw;
+  height: 180px;
+  margin: auto;
+  perspective: 1000px;
+}
+.envelope-top {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 80px;
+  background: #ff6f91;
+  border-radius: 10px 10px 0 0;
+  transform-origin: top center;
+  transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  z-index: 3;
+}
+.envelope-body {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+  background: #ff4d6d;
+  border-radius: 0 0 15px 15px;
+}
+.letter {
+  position: absolute;
+  top: 30px;
+  left: 5%;
+  width: 90%;
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  z-index: 1;
+  transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+.envelope.open .envelope-top { transform: rotateX(-130deg); }
+.envelope.open .letter { transform: translateY(-100px); }
+.letter-photo {
+  width: 100%;
+  height: 120px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.heart-seal {
+  position: absolute;
+  top: 65px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 32px;
+  z-index: 4;
+  animation: pulse 1.5s infinite;
+  cursor: pointer;
+}
+@keyframes pulse { 50% { transform: translateX(-50%) scale(1.2); } }
+.tap-text { color: #ff4d6d; margin-top: 12px; font-size: 14px; }
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 10;
+}
+.modal-content {
+  background: white;
+  width: 90%;
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 20px;
+  border-radius: 20px;
+  animation: pop 0.4s ease;
+}
+@keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.close { float: right; font-size: 24px; cursor: pointer; }
+
+.nav {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px 0;
+}
+.nav button {
+  border: none;
+  background: #ffe6eb;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 18px;
+}
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* Gallery (Instagram style) */
+.slideshow {
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 12px;
+  position: relative;
+}
+.slider {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease;
+}
+.slide {
+  min-width: 100%;
+  height: 100%;
+}
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .slideshow { height: 180px; }
+}
+</style>
+</head>
+<body>
+
+<div class="falling-container"></div>
+
+<!-- Envelope -->
+<div class="envelope-container">
+  <div class="envelope">
+    <div class="envelope-top"></div>
+    <div class="letter">
+      <img src="Image1.jpg" class="letter-photo">
+      <h3>Hello Bebiii 💖</h3>
+      <p>This letter is sealed with my heart 💌</p>
+    </div>
+    <div class="heart-seal">💓</div>
+    <div class="envelope-body"></div>
+  </div>
+  <p class="tap-text">Tap the heart 💕</p>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div class="status">💖 Happy Valentines, Bebiii!</div>
+
+    <div class="nav">
+      <button onclick="showScreen('home')">🏠</button>
+      <button onclick="showScreen('message')">💌</button>
+      <button onclick="showScreen('gallery')">📸</button>
+      <button id="secretBtn" onclick="showScreen('secret')" disabled>🎁</button>
+    </div>
+
+    <div class="screen active" id="home">
+      <h2>Welcome, my favorite person 💖</h2>
+      <button class="primary" onclick="startMagic()">Start Magic ✨</button>
+    </div>
+
+    <div class="screen" id="message">
+      <h2>Message Inbox 💌</h2>
+      <p id="loveText"></p>
+      <button onclick="nextLove()">Next Message 💕</button>
+    </div>
+
+    <div class="screen" id="gallery">
+      <h2>Our Memories 📸</h2>
+      <div class="slideshow">
+        <div class="slider" id="slider">
+          <div class="slide"><img src="img1.jpg"></div>
+          <div class="slide"><img src="img2.jpg"></div>
+          <div class="slide"><img src="img3.jpg"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen" id="secret">
+      <h2>Secret Gift 🎁</h2>
+      <video autoplay loop muted style="width:100%;border-radius:12px;">
+        <source src="video.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</div>
+
+<script>
+// Envelope open
+const modal = document.getElementById("modal");
+const envelope = document.querySelector(".envelope");
+const secretBtn = document.getElementById("secretBtn");
+
+document.querySelector(".heart-seal").onclick = () => {
+  envelope.classList.add("open");
+  setTimeout(() => modal.style.display = "block", 900);
+};
+document.querySelector(".close").onclick = () => modal.style.display = "none";
+
+// Screens
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+// 💌 Typing love messages
+const loveMessages = [
+  "You are my favorite notification 💖",
+  "System alert: I miss you 🌻",
+  "Heart storage full 💕",
+  "No bugs detected… only love 😘",
+  "No matter what happens, I choose you 💞"
+];
+let loveIndex = 0;
+let interactionCount = 0;
+const loveTextEl = document.getElementById("loveText");
+
+function typeMessage(text){
+  loveTextEl.innerHTML = "";
+  let i=0;
+  const timer=setInterval(()=>{
+    loveTextEl.innerHTML += text.charAt(i);
+    i++;
+    if(i>=text.length) clearInterval(timer);
+  },40);
+}
+typeMessage(loveMessages[0]);
+
+function nextLove(){
+  loveIndex = (loveIndex+1) % loveMessages.length;
+  typeMessage(loveMessages[loveIndex]);
+  interactionCount++;
+  if(interactionCount>=3) secretBtn.disabled=false;
+}
+
+// 🌸 Falling hearts
+const fallingContainer = document.querySelector(".falling-container");
+const flowers = ["💖","🌹","🌷"];
+setInterval(()=>{
+  const el=document.createElement("span");
+  el.innerText=flowers[Math.floor(Math.random()*flowers.length)];
+  el.style.left=Math.random()*100+"vw";
+  el.style.animationDuration=4+Math.random()*3+"s";
+  fallingContainer.appendChild(el);
+  setTimeout(()=>el.remove(),7000);
+},350);
+
+// 📸 Instagram-like swipe gallery + auto slide
+const slider = document.getElementById("slider");
+const slides = document.querySelectorAll(".slide");
+let currentIndex = 0;
+let startX = 0;
+
+function showSlide(i){
+  if(i<0) i=slides.length-1;
+  if(i>=slides.length) i=0;
+  currentIndex=i;
+  slider.style.transform = `translateX(-${i*100}%)`;
+}
+
+// auto swipe
+setInterval(()=>showSlide(currentIndex+1),3000);
+
+// swipe touch (iPhone)
+slider.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
+slider.addEventListener("touchend",e=>{
+  let endX=e.changedTouches[0].clientX;
+  if(startX-endX>50) showSlide(currentIndex+1);
+  else if(endX-startX>50) showSlide(currentIndex-1);
+});
+
+// Start magic
+function startMagic(){
+  showScreen("message");
+}
+</script>
+
+</body>
+</html>
