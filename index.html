@@ -370,13 +370,13 @@ function nextLove(){
 }
 
 const fallingContainer = document.querySelector(".falling-container");
-const flowers = ["💖","🌹","🌷"];
+const flowers = ["💖","🌹","🌷","🌻","🌺"];
 
 setInterval(()=>{
   const el=document.createElement("span");
   el.innerText=flowers[Math.floor(Math.random()*flowers.length)];
   el.style.left=Math.random()*100+"vw";
-  el.style.animationDuration=4+Math.random()*3+"s";
+  el.style.animationDuration=4+Math.random()*5+"s";
   fallingContainer.appendChild(el);
   setTimeout(()=>el.remove(),7000);
 },350);
