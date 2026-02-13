@@ -225,6 +225,27 @@ button:hover, .primary:hover { transform: scale(1.05); }
   object-fit: contain;      /* ✅ prevents cropping */
   border-radius: 12px;
 }
+/* FIXED RESPONSIVE VIDEO */
+.video-container {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 30px;
+  overflow: hidden;
+  background: white;
+
+  /* Choose ONE depending on your video orientation */
+  aspect-ratio: 16 / 9;
+   /* For portrait video */
+  /* aspect-ratio: 16 / 9;  For landscape video */
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+   border-radius: 30px;
+  object-fit: contain;   /* Shows full video */
+  display: block;
+}
 
 </style>
 </head>
@@ -280,21 +301,22 @@ button:hover, .primary:hover { transform: scale(1.05); }
           <div class="slide"><img src="img2.jpg"></div>
           <div class="slide"><img src="img3.jpg"></div>
           <div class="slide"><img src="img4.jpg"></div>
-          <div class="slide"><img src="img5.jpg"></div>
-          <div class="slide"><img src="img6.jpg"></div>
-            <div class="slide"><img src="img7.jpg"></div>
-            <div class="slide"><img src="img8.jpg"></div>
-            <div class="slide"><img src="img9.jpg"></div>
-            <div class="slide"><img src="img10.jpg"></div>
+          <div class="slide"><img src="img3.jpg"></div>
+          <div class="slide"><img src="img3.jpg"></div>
+          <div class="slide"><img src="img3.jpg"></div>
         </div>
       </div>
     </div>
 
     <div class="screen" id="secret">
       <h2>Secret Gift 🎁</h2>
-      <video autoplay loop muted playsinline style="width:100%;border-radius:12px;">
-        <source src="Video.mp4" type="video/mp4">
-      </video>
+      <div class="video-container">
+  <video autoplay loop muted playsinline>
+    <source src="Video.mp4" type="video/mp4">
+  </video>
+</div>
+
+
     </div>
 
   </div>
@@ -388,6 +410,3 @@ function startMagic(){
 
 </body>
 </html>
-
-
-
