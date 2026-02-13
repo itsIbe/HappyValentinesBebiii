@@ -95,25 +95,30 @@ button:hover, .primary:hover { transform: scale(1.05); }
 
 .letter {
   position: absolute;
-  top: 30px;
+  top: 20px;
   left: 5%;
   width: 90%;
   background: white;
   border-radius: 12px;
-  padding: 10px;
+  padding: 15px;
   z-index: 1;
   transition: transform 1.2s cubic-bezier(0.68,-0.55,0.27,1.55);
+  box-sizing: border-box;
 }
+
+.letter-photo {
+  width: 100%;
+  height: auto;          /* ✅ Keeps full image ratio */
+  max-height: 220px;     /* ✅ Prevents being too tall */
+  object-fit: contain;   /* ✅ Shows entire image */
+  border-radius: 10px;
+  display: block;
+}
+
 
 .envelope.open .envelope-top { transform: rotateX(-130deg); }
 .envelope.open .letter { transform: translateY(-100px); }
 
-.letter-photo {
-  width: 100%;
-  height: 120px;
-  border-radius: 10px;
-  object-fit: cover;
-}
 
 .heart-seal {
   position: absolute;
@@ -188,28 +193,39 @@ button:hover, .primary:hover { transform: scale(1.05); }
 .screen.active { display: block; }
 
 /* Gallery */
+/* Gallery */
 .slideshow {
   width: 100%;
-  height: 220px;
+  max-height: 320px;        /* allow flexible height */
   overflow: hidden;
   border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .slider {
   display: flex;
   transition: transform 0.5s ease-in-out;
+  width: 100%;
 }
 
 .slide {
   min-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .slide img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 320px;        /* control max height */
+  width: auto;
+  height: auto;
+  object-fit: contain;      /* ✅ prevents cropping */
   border-radius: 12px;
 }
+
 </style>
 </head>
 
@@ -260,6 +276,10 @@ button:hover, .primary:hover { transform: scale(1.05); }
         <div class="slider" id="slider">
           <div class="slide"><img src="Img1.jpg"></div>
           <div class="slide"><img src="img2.jpg"></div>
+          <div class="slide"><img src="img3.jpg"></div>
+          <div class="slide"><img src="img3.jpg"></div>
+          <div class="slide"><img src="img3.jpg"></div>
+          <div class="slide"><img src="img3.jpg"></div>
           <div class="slide"><img src="img3.jpg"></div>
         </div>
       </div>
@@ -356,9 +376,10 @@ slider.addEventListener("touchend",e=>{
 
 function startMagic(){
   showScreen("message");
+  secretBtn.disabled = false;   // unlock here
 }
+
 </script>
 
 </body>
 </html>
-
